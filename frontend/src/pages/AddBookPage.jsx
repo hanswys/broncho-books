@@ -10,6 +10,8 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useBookStore } from "../store/books";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
+import imageCompression from "browser-image-compression"; // Import the library
 
 const AddBookPage = () => {
   const { createBook } = useBookStore(); // Import createBook from the store
@@ -20,28 +22,48 @@ const AddBookPage = () => {
   });
 
   const toast = useToast();
+  const navigate = useNavigate(); // Initialize useNavigate
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) {
-        // Limit file size to 5MB
-        toast({
-          title: "Error",
-          description: "File size exceeds 5MB. Please upload a smaller file.",
-          status: "error",
-          isClosable: true,
-        });
-        return;
-      }
+const handleFileChange = async (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    if (file.size > 5 * 1024 * 1024) {
+      // Limit file size to 5MB
+      toast({
+        title: "Error",
+        description: "File size exceeds 5MB. Please upload a smaller file.",
+        status: "error",
+        isClosable: true,
+      });
+      return;
+    }
 
+    try {
+      // Compress the image
+      const options = {
+        maxSizeMB: 1, // Maximum size in MB
+        maxWidthOrHeight: 800, // Maximum width or height
+        useWebWorker: true, // Use a web worker for better performance
+      };
+      const compressedFile = await imageCompression(file, options);
+
+      // Convert the compressed image to Base64
       const reader = new FileReader();
       reader.onload = () => {
-        setNewProduct((prev) => ({ ...prev, image: reader.result })); // Save the base64 string
+        setNewProduct((prev) => ({ ...prev, image: reader.result })); // Save the Base64 string
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(compressedFile);
+    } catch (error) {
+      console.error("Error compressing the image:", error);
+      toast({
+        title: "Error",
+        description: "Failed to compress the image. Please try again.",
+        status: "error",
+        isClosable: true,
+      });
     }
-  };
+  }
+};
 
   const handleAddBook = async () => {
     const user = JSON.parse(localStorage.getItem("user")); // Retrieve the current user from localStorage
@@ -76,7 +98,10 @@ const AddBookPage = () => {
         status: "success",
         isClosable: true,
       });
+
       setNewProduct({ title: "", price: "", image: "" }); // Reset the form
+
+      navigate("/"); // Navigate to the homepage after success
     }
   };
 
