@@ -57,3 +57,13 @@ export const deleteBooks = async (req, res) => {
         res.status(500).json({ message: "Error deleting book" }); // Handle server errors
     }
 };
+
+export const deleteAllBooks = async (req, res) => {
+    try {
+        const result = await Book.deleteMany({}); // Deletes all documents in the books collection
+        res.status(200).json({ message: "All books deleted successfully", result });
+    } catch (error) {
+        res.status(500).json({ message: "Error deleting all books", error });
+    }
+};
+
