@@ -9,7 +9,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     logoutUser(); // Clear user data from localStorage and store
-    navigate("/login"); // Redirect to login page
+    navigate("/"); // Redirect to login page
   };
 
   const handleAccount = () => {

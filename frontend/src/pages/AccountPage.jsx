@@ -47,7 +47,7 @@ const AccountPage = () => {
           <Tabs variant="enclosed" w="full" maxW="container.md">
             <TabList>
               <Tab>My Books</Tab>
-              <Tab>My Messages</Tab>
+              {/* <Tab>My Messages</Tab> */}
             </TabList>
 
             <TabPanels>
