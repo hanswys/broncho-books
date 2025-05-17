@@ -62,7 +62,7 @@ const AccountPage = () => {
 
     const { success, message } = await updateBook(selectedBook._id, {
         ...selectedBook,
-        price: parseFloat(newPrice),
+        price: parseFloat(newPrice), // Update the price
     });
 
     if (success) {
@@ -89,6 +89,32 @@ const AccountPage = () => {
             isClosable: true,
         });
     }
+};
+
+const handleDeleteBook = async (bookId) => {
+  const confirmation = window.confirm("Are you sure you want to delete this book?");
+  if (!confirmation) return;
+
+  const { success, message } = await deleteBook(bookId); // Call the deleteBook function from the store
+
+  if (success) {
+    toast({
+      title: "Success",
+      description: "Book deleted successfully.",
+      status: "success",
+      isClosable: true,
+    });
+
+    // Optionally, update the local state to reflect the deletion
+    setUserBooks((prevBooks) => prevBooks.filter((book) => book._id !== bookId));
+  } else {
+    toast({
+      title: "Error",
+      description: message,
+      status: "error",
+      isClosable: true,
+    });
+  }
 };
 
   return (

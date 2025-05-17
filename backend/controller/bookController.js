@@ -27,20 +27,23 @@ export const addBooks = async (req, res) => {
 };
 
 export const updateBooks = async (req, res) => {
-    const { id } = req.params; // get the id from the url
-    const book = req.body; // get the book from the body
+    const { id } = req.params; // Get the book ID from the URL
+    const book = req.body; // Get the updated book data from the request body
 
-    if(!book.title || !book.price || !book.image) {
-        return res.status(400).json({ message: "Please fill all the fields" });
+    if (!book.title || !book.price || !book.image) {
+        return res.status(400).json({ success: false, message: "Please fill all the fields" });
     }
 
     try {
-        const updatedBook = await Book.findByIdAndUpdate(id, book, { new: true });
-        res.status(200).json(updatedBook);
+        const updatedBook = await Book.findByIdAndUpdate(id, book, { new: true }); // Update and return the updated book
+        if (!updatedBook) {
+            return res.status(404).json({ success: false, message: "Book not found" });
+        }
+        res.status(200).json({ success: true, updatedBook });
     } catch (error) {
-        res.status(500).json({ message: "Error updating book" });
+        res.status(500).json({ success: false, message: "Error updating book" });
     }
-}
+};
 
 export const deleteBooks = async (req, res) => {
     const { id } = req.params; // Get the book ID from the URL

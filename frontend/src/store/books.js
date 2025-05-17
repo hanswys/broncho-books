@@ -41,20 +41,23 @@ export const useBookStore = create((set) => ({
         return { success: true, message: data.message };
     },
     updateBook: async (bid, updatedBook) => {
-        const res = await fetch(`http://localhost:3000/api/books/${bid}`, { // Updated URL
-            method: "PUT",
+        const res = await fetch(`http://localhost:3000/api/books/${bid}`, {
+            method: "PATCH", // Use PATCH for partial updates
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(updatedBook),
         });
+    
         const data = await res.json();
-        if (!data.success) return { success: false, message: data.message };
-
+        if (!res.ok) {
+            return { success: false, message: data.message };
+        }
+    
         set((state) => ({
-            books: state.books.map((book) => (book._id === bid ? data : book)),
+            books: state.books.map((book) => (book._id === bid ? data.updatedBook : book)), // Update the state with the updated book
         }));
-
-        return { success: true, message: data.message };
+    
+        return { success: true, message: "Book updated successfully" };
     },
 }));
