@@ -56,40 +56,40 @@ const AccountPage = () => {
 
   const handleUpdatePrice = async () => {
     if (!newPrice || isNaN(newPrice)) {
-        alert("Please enter a valid price.");
-        return;
+      alert("Please enter a valid price.");
+      return;
     }
-
+  
     const { success, message } = await updateBook(selectedBook._id, {
-        ...selectedBook,
-        price: parseFloat(newPrice), // Update the price
+      ...selectedBook,
+      price: parseFloat(newPrice), // Update the price
     });
-
+  
     if (success) {
-        toast({
-            title: "Success",
-            description: "Book price updated successfully.",
-            status: "success",
-            isClosable: true,
-        });
-
-        // Update the local state to reflect the new price
-        setUserBooks((prevBooks) =>
-            prevBooks.map((book) =>
-                book._id === selectedBook._id ? { ...book, price: parseFloat(newPrice) } : book
-            )
-        );
-
-        onClose(); // Close the modal
+      toast({
+        title: "Success",
+        description: "Book price updated successfully.",
+        status: "success",
+        isClosable: true,
+      });
+  
+      // Update the local state to reflect the new price
+      setUserBooks((prevBooks) =>
+        prevBooks.map((book) =>
+          book._id === selectedBook._id ? { ...book, price: parseFloat(newPrice) } : book
+        )
+      );
+  
+      onClose(); // Close the modal after success
     } else {
-        toast({
-            title: "Error",
-            description: message,
-            status: "error",
-            isClosable: true,
-        });
+      toast({
+        title: "Error",
+        description: message,
+        status: "error",
+        isClosable: true,
+      });
     }
-};
+  };
 
 const handleDeleteBook = async (bookId) => {
   const confirmation = window.confirm("Are you sure you want to delete this book?");
