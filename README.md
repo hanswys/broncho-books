@@ -36,7 +36,7 @@ I built Broncho Books to help UCO students easily exchange textbooks and to deep
 
 ## 🚀 Live Demo
 
-🔗 [_[Add your live demo link here]_](https://youtu.be/0nFaRoAJzcc)
+🔗 https://youtu.be/0nFaRoAJzcc
 
 Home Page 
 <img width="1470" alt="Screenshot 2025-06-09 at 9 51 37 PM" src="https://github.com/user-attachments/assets/1f62b391-574b-4058-9f4b-a52a9bacc08d" />
